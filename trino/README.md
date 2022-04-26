@@ -12,7 +12,7 @@ Port 9000 on the docker host
 
 ## Trino
 ### Create a single node container
-multipass exec docker -- docker start -p 8080:8080 --name trino trinodb/trino
+multipass exec docker -- docker run -p 8080:8080 --name trino trinodb/trino
 
 ### Accessing Trino UI
 Port 8080 on the docker host
