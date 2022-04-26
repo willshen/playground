@@ -64,6 +64,7 @@ public class TestAggregationAccumulatorStateSerializer implements AccumulatorSta
             metrics.add(new Metric(type, revenue, count));
         }
 
+        state.getMetrics().clear();
         state.getMetrics().addAll(metrics);
         state.addMemoryUsage(3 * n * LONG_SIZE);
     }
