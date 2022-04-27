@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  trino-coordinator:
+    image: 'trinodb/trino:latest'
+    hostname: trino-coordinator
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./etc:/etc/trino
+      - ./conf/core-site.xml:/etc/hadoop/conf/core-site.xml:ro
+      - ./conf/hdfs-site.xml:/etc/hadoop/conf/hdfs-site.xml:ro
+    networks:
+      - trino-network
+
+  hadoop-node:
+    image: 'ghcr.io/trinodb/testing/cdh5.12-hive:latest'
+    hostname: hadoop-node
+    ports:
+      - '3306:3306' # Metastore MySQL Database
+      - '9083:9083' # Metastore Thrift
+      - '50075:50075' # DataNode Web UI for CDH 5
+      - '50070:50070' # NameNode Web UI for CDH 5
+      - '10000:10000' # HiveServer2
+      - '8088:8088' # YARN RM
+    volumes:
+      - ./conf/core-site.xml:/etc/hadoop/conf/core-site.xml:ro
+    networks:
+      - trino-network
+
+networks:
+  trino-network:
+    driver: bridge
