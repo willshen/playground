@@ -73,14 +73,14 @@ logout
 
 #### Querying Trino
 ```
-$ multipass exec docker -- docker container exec -it trino-cdh-512_trino-coordinator_1 trino
+$ multipass exec docker -- docker container exec -it trino-cdh512_trino-coordinator_1 trino
 trino> 
 ```
 
 #### Accessing HDFS
 NameNode UI: Port 50070 on docker host
 ```
-$ multipass exec docker -- docker container exec -it trino-cdh-512_hadoop-node_1 hadoop fs -ls /
+$ multipass exec docker -- docker container exec -it trino-cdh512_hadoop-node_1 hadoop fs -ls /
 Found 5 items
 drwxrwxrwx   - hdfs  supergroup          0 2021-01-18 20:43 /benchmarks
 drwxr-xr-x   - hbase supergroup          0 2021-01-18 20:43 /hbase
