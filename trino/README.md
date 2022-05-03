@@ -91,5 +91,5 @@ drwxr-xr-x   - hdfs  supergroup          0 2021-01-18 20:44 /var
 
 #### Querying Hive
 ```
-multipass exec docker -- docker container exec -it trino-cdh-512_hadoop-node_1 hive
+multipass exec docker -- docker container exec -it trino-cdh512_hadoop-node_1 hive
 ```
