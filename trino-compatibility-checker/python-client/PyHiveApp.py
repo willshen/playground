@@ -14,9 +14,9 @@ if __name__ == '__main__':
 
     print("Application starting...")
     
-    from pyhive import presto
+    from pyhive import trino
 
-    conn = presto.connect(
+    conn = trino.connect(
         host=HOST,
         port=PORT,
         catalog='hive',
