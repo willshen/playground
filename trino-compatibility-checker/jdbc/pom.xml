@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.willshen.playground</groupId>
+    <artifactId>trino-jdbc-compatibility-checker</artifactId>
+    <version>0.1-SNAPSHOT</version>
+
+    <properties>
+        <jdbc.group>io.trino</jdbc.group>
+        <jdbc.artifact>trino-jdbc</jdbc.artifact>
+        <jdbc.version>385</jdbc.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${jdbc.group}</groupId>
+                <artifactId>${jdbc.artifact}</artifactId>
+                <version>${jdbc.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>${jdbc.group}</groupId>
+            <artifactId>${jdbc.artifact}</artifactId>
+        </dependency>
+    </dependencies>
+</project>

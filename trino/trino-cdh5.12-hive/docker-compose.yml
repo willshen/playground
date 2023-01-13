@@ -14,7 +14,7 @@ services:
 
   hadoop-node:
     image: 'ghcr.io/trinodb/testing/cdh5.12-hive:latest'
-    hostname: hadoop-node
+    hostname: hadoop-master
     ports:
       - '3306:3306' # Metastore MySQL Database
       - '9083:9083' # Metastore Thrift
@@ -24,6 +24,121 @@ services:
       - '8088:8088' # YARN RM
     volumes:
       - ./conf/core-site.xml:/etc/hadoop/conf/core-site.xml:ro
+      - ./conf/hdfs-site.xml:/etc/hadoop/conf/hdfs-site.xml:ro
+    networks:
+      - trino-network
+
+  spark16-master:
+    image: gettyimages/spark:1.6.0-hadoop-2.6
+    command: /usr/spark/bin/spark-class org.apache.spark.deploy.master.Master -h spark16-master
+    hostname: spark16-master
+    environment:
+      MASTER: spark://spark16-master:7077
+      SPARK_CONF_DIR: /conf
+      PYSPARK_PYTHON: python3
+    expose:
+      - 7001
+      - 7002
+      - 7003
+      - 7004
+      - 7005
+      - 7006
+      - 7077
+      - 6066
+    ports:
+      - 4040:4040
+      - 6066:6066
+      - 7077:7077
+      - 8082:8080
+    volumes:
+      - ./conf/master:/conf
+      - ./data:/tmp/data
+    networks:
+      - trino-network
+
+  spark16-worker:
+    image: gettyimages/spark:1.6.0-hadoop-2.6
+    command: /usr/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark16-master:7077
+    hostname: spark16-worker
+    environment:
+      SPARK_CONF_DIR: /conf
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8081
+      PYSPARK_PYTHON: python3
+    links:
+      - spark16-master
+    expose:
+      - 7012
+      - 7013
+      - 7014
+      - 7015
+      - 7016
+      - 8881
+    ports:
+      - 8081:8081
+    volumes:
+      - ./conf/worker:/conf
+      - ./data:/tmp/data
+    networks:
+      - trino-network
+
+  spark23-master:
+    image: bde2020/spark-master:2.3.0-hadoop2.7
+    container_name: spark23-master
+    ports:
+      - "8083:8080"
+      - "7078:7077"
+    volumes:
+      - ./conf/master:/conf
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+      - SPARK_CONF_DIR=/conf
+    networks:
+      - trino-network
+
+  spark23-worker:
+    image: bde2020/spark-worker:2.3.0-hadoop2.7
+    container_name: spark23-worker
+    depends_on:
+      - spark23-master
+    ports:
+      - "8084:8081"
+    volumes:
+      - ./conf/worker:/conf
+    environment:
+      - "SPARK_MASTER=spark://spark23-master:7077"
+      - SPARK_CONF_DIR=/conf
+    networks:
+      - trino-network
+
+  spark24-master:
+    image: bde2020/spark-master:2.4.0-hadoop2.7
+    container_name: spark24-master
+    ports:
+      - "8085:8080"
+      - "7079:7077"
+    volumes:
+      - ./conf/master:/conf
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+      - SPARK_CONF_DIR=/conf
+    networks:
+      - trino-network
+
+  spark24-worker:
+    image: bde2020/spark-worker:2.4.0-hadoop2.7
+    container_name: spark24-worker
+    depends_on:
+      - spark24-master
+    ports:
+      - "8086:8081"
+    volumes:
+      - ./conf/worker:/conf
+    environment:
+      - "SPARK_MASTER=spark://spark24-master:7077"
+      - SPARK_CONF_DIR=/conf
     networks:
       - trino-network
 
