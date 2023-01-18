@@ -1,6 +1,3 @@
-import importlib
-
-
 class PythonApp:
     def __init__(self):
         self.url = ""
